@@ -24,16 +24,12 @@ client.on("connect", () => {
     });
 });
 
-
-
 client.on("message", (topic, payload, packet) => {
     let messageJSON = payload.toString();
     let message = JSON.parse(messageJSON);
     messages.push(message.Texto);
     console.log(message)
 });
-
-
 
 const app = express()
 
