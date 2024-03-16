@@ -1,6 +1,6 @@
 import mqtt from "mqtt";
 import express from "express"
-
+import cors from "cors"
 
 const clientId = "client" + Math.random().toString(36).substring(7);
 const hostUrl = "mqtt://broker.mqttdashboard.com:1883";
@@ -32,9 +32,11 @@ client.on("message", (topic, payload, packet) => {
 });
 
 const app = express()
+app.use(express.json())
+app.use(cors())
 
 app.get('/messages', function(request, response) {
-    response.send(messages)
+    response.json(messages)
 })
 
 const PORT = process.env.PORT || 8000
