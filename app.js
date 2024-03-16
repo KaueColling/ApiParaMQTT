@@ -37,6 +37,7 @@ app.get('/messages', function(request, response) {
     response.json(messages)
 })
 
-app.listen(3000, () => {
+const PORT = process.env.PORT || 8000
+app.listen(PORT, () => {
     console.log("Running")
 })
