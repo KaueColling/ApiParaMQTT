@@ -15,7 +15,7 @@ const options = {
 };
 
 const client = mqtt.connect(hostUrl, options);
-const messages: Array<string> = []
+const messages = []
 
 client.on("connect", () => {
     console.log("connected");
