@@ -34,7 +34,7 @@ client.on("message", (topic, payload, packet) => {
 const app = express()
 
 app.get('/messages', function(request, response) {
-    response.json(messages)
+    response.send(messages)
 })
 
 const PORT = process.env.PORT || 8000
