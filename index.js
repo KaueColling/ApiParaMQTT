@@ -1,5 +1,5 @@
-const mqtt = require("mqtt")
-const express = require("express")
+import mqtt from "mqtt";
+import express from "express"
 
 
 const clientId = "client" + Math.random().toString(36).substring(7);
