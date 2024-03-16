@@ -39,6 +39,11 @@ app.get('/messages', function(request, response) {
     response.json(messages)
 })
 
+app.get('/', function(request, response) {
+    response.json("Api para mqtt")
+})
+
+
 const PORT = process.env.PORT || 8000
 app.listen(PORT, () => {
     console.log("Running")
