@@ -15,7 +15,7 @@ const options = {
 };
 
 const client = mqtt.connect(hostUrl, options);
-const messages = []
+const messages: Array<string> = []
 
 client.on("connect", () => {
     console.log("connected");
@@ -23,6 +23,7 @@ client.on("connect", () => {
         //subscribes
     });
 });
+
 
 
 client.on("message", (topic, payload, packet) => {
@@ -40,6 +41,6 @@ app.get('/messages', function(request, response) {
     response.json(messages)
 })
 
-app.listen(3001, () => {
+app.listen(3000, () => {
     console.log("Running")
 })
