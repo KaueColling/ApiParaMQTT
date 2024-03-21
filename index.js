@@ -2,6 +2,24 @@ import mqtt from "mqtt";
 import express from "express"
 import cors from "cors"
 
+
+const estufas = {
+    legumes: [
+        "pimentao",
+        "cenoura",
+        "abobora",
+    ],
+    verduras: [],
+    frutas: []
+}
+
+const subscribes = []
+Object.keys(estufas).forEach(parent => {
+    estufas[parent].map(((index) => {
+        subscribes.push(parent + "/"+ index)
+    }))
+});
+
 const clientId = "client" + Math.random().toString(36).substring(7);
 const hostUrl = "mqtt://broker.mqttdashboard.com:1883";
 const options = {
@@ -14,41 +32,39 @@ const options = {
     connectTimeout: 5000,
 };
 
-const client = mqtt.connect(hostUrl, options);
+const topics = {
 
-
-const estufas = {
-    Legumes: {
-        Pimentao: {},
-        Cenoura: {},
-        Abobora: {},
-    },
-    Verduras: [],
-    Frutas: []
 }
 
-const mensagens = []
-
+const client = mqtt.connect(hostUrl, options);
 client.on("connect", () => {
     console.log("connected");
-    client.subscribe("gourmet", (err) => {
-        //subscribes
-    });
+    subscribes.map((toSubscribe) => {
+        client.subscribe(toSubscribe, (err) => {
+            //subscribes
+        });
+    })
 });
+
 
 client.on("message", (topic, payload, packet) => {
     let messageJSON = payload.toString();
     let message = JSON.parse(messageJSON);
-    mensagens.push(message);
+
+    
+    if (topics[topic] == undefined) {
+        app.get("/"+ topic, function(request, response) {
+            response.json(topics[topic])
+        })
+    }
+    topics[topic] = message
 });
+
 
 const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.get('/mensagens', function(request, response) {
-    response.json(mensagens)
-})
 
 app.get('/', function(request, response) {
     response.json("Api para mqtt")
