@@ -15,11 +15,23 @@ const options = {
 };
 
 const client = mqtt.connect(hostUrl, options);
-const messages = []
+
+
+const estufas = {
+    Legumes: {
+        Pimentao: {},
+        Cenoura: {},
+        Abobora: {},
+    },
+    Verduras: [],
+    Frutas: []
+}
+
+const mensagens = []
 
 client.on("connect", () => {
     console.log("connected");
-    client.subscribe("Rodex", (err) => {
+    client.subscribe("gourmet", (err) => {
         //subscribes
     });
 });
@@ -27,16 +39,15 @@ client.on("connect", () => {
 client.on("message", (topic, payload, packet) => {
     let messageJSON = payload.toString();
     let message = JSON.parse(messageJSON);
-    messages.push(message.Texto);
-    console.log(message)
+    mensagens.push(message);
 });
 
 const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.get('/messages', function(request, response) {
-    response.json(messages)
+app.get('/mensagens', function(request, response) {
+    response.json(mensagens)
 })
 
 app.get('/', function(request, response) {
