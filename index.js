@@ -40,9 +40,17 @@ const client = mqtt.connect(hostUrl, options);
 client.on("connect", () => {
     console.log("connected");
     subscribes.map((toSubscribe) => {
+        if (topics[toSubscribe] == undefined) {
+            app.get("/"+ toSubscribe, function(request, response) {
+                response.json(topics[toSubscribe])
+            })
+        }
+
         client.subscribe(toSubscribe, (err) => {
             //subscribes
         });
+
+      
     })
 });
 
