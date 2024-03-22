@@ -16,7 +16,7 @@ const estufas = {
 const subscribes = []
 Object.keys(estufas).forEach(parent => {
     estufas[parent].map(((index) => {
-        subscribes.push(parent + "/"+ index)
+        subscribes.push(parent + "/" + index)
     }))
 });
 
@@ -32,25 +32,29 @@ const options = {
     connectTimeout: 5000,
 };
 
-const topics = {
+const topics = {}
 
+function bindTopic(topic) {
+    if (topics[topic] == undefined) {
+        app.get("/" + topic, function (request, response) {
+            response.json(topics[topic])
+        })
+        console.log("binded: " + topic)
+
+
+        client.subscribe(topic, (err, granted) => {
+            if (granted.topic == undefined) {
+                topics[topic] = granted
+            }
+        });
+    }
 }
 
 const client = mqtt.connect(hostUrl, options);
 client.on("connect", () => {
     console.log("connected");
-    subscribes.map((toSubscribe) => {
-        if (topics[toSubscribe] == undefined) {
-            app.get("/"+ toSubscribe, function(request, response) {
-                response.json(topics[toSubscribe])
-            })
-        }
-
-        client.subscribe(toSubscribe, (err) => {
-            //subscribes
-        });
-
-      
+    subscribes.map((topic) => {
+        bindTopic(topic)
     })
 });
 
@@ -58,14 +62,9 @@ client.on("connect", () => {
 client.on("message", (topic, payload, packet) => {
     let messageJSON = payload.toString();
     let message = JSON.parse(messageJSON);
-
-    
-    if (topics[topic] == undefined) {
-        app.get("/"+ topic, function(request, response) {
-            response.json(topics[topic])
-        })
-    }
+    bindTopic(topic)
     topics[topic] = message
+    console.log(topics[topic])
 });
 
 
@@ -74,7 +73,7 @@ app.use(express.json())
 app.use(cors())
 
 
-app.get('/', function(request, response) {
+app.get('/', function (request, response) {
     response.json("Api para mqtt")
 })
 
