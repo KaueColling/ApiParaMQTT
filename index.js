@@ -19,8 +19,8 @@ Object.keys(estufas).forEach(parent => {
     }))
 });
 
-const clientId = "client" + Math.random().toString(36).substring(7);
-const hostUrl = "mqtt://broker.mqttdashboard.com:1883";
+const clientId = "horta-restaurante-gourmet" + Math.random().toString(36).substring(7);
+const hostUrl = "broker.mqttdashboard.com";
 const options = {
     keepalive: 60,
     clientId: clientId,
