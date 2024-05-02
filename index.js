@@ -12,7 +12,6 @@ const estufas = {
     verduras: [],
     frutas: []
 }
-
 const subscribes = []
 Object.keys(estufas).forEach(parent => {
     estufas[parent].map(((index) => {
